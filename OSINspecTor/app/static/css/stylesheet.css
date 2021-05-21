@@ -14,10 +14,13 @@ body {
     background-size: contain;
     
     /* Text */
-    font-size: calc(1em + 1vmin);
+    font-size: 1em;
     font-family: "Archivo Narrow", sans-serif;
     text-align: center;
     color: var(--color2);
+
+    /* margins */
+    padding-top: 9vh;
 }
 
 footer {
@@ -40,4 +43,15 @@ a:hover {
 
 a:active {
     color: var(--color4);
+}
+
+#nav-custom {
+    background-color: #e3f2fd;
+}
+
+@media (min-width: 992px){
+    .navbar li {
+        margin-left : 1em;
+        margin-right : 1em;
+    }
 }

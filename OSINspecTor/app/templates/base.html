@@ -11,25 +11,51 @@
 
     <title>OSINspecTor</title>
     <link rel="icon" type="image/png" href="{% static "ico/lupa.png" %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "vendor/bootstrap/css/bootstrap.min.css"%}" rel="stylesheet">
+    <script src="{% static "vendor/bootstrap/js/bootstrap.min.js"%}"></script>
+    
+    <!-- jQuery -->
+    <script src="{% static "vendor/jquery/jquery.min.js"%}"></script>
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{% static "css/stylesheet.css" %}" />
 
   </head>
 
   <body>
-
     <!-- Navigation -->
-    <nav>
-      <a href="{% url 'index'%}">Inicio</a>
-      |
-      <a href="{% url 'index'%}">Búsqueda por Dominio</a>
-      |
-      <a href="{% url 'index'%}">Búsqueda por IP</a>
-      <hr>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-0" id="nav-custom">
+      <div class="container">
+        <a class="navbar-brand mb-1" href="{% url 'index'%}">OSINspecTor</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto h5">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index'%}">Inicio
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index'%}">Búsqueda por Dominio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index'%}">Búsqueda por IP
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>      
     </nav>
-
     <!-- Page Content -->
     <section>
-      <div>
+      <div class="container">
       
         {% block content %}{% endblock %}
 
@@ -41,7 +67,6 @@
       <hr>
       <p>Desarrollado por Daniel Feito Pin, Ignacio Borregán Naya y Paula Serrano Chans para PI.</p>
     </footer>
-
   </body>
 
 </html>
