@@ -10,25 +10,36 @@
     <meta name="author" content="">
 
     <title>OSINspecTor</title>
+    <link rel="icon" type="image/png" href="{% static "ico/lupa.png" %}" />
+    <link rel="stylesheet" href="{% static "css/stylesheet.css" %}" />
 
   </head>
 
   <body>
 
     <!-- Navigation -->
-
+    <nav>
+      <a href="{% url 'index'%}">Inicio</a>
+      |
+      <a href="{% url 'index'%}">Búsqueda por Dominio</a>
+      |
+      <a href="{% url 'index'%}">Búsqueda por IP</a>
+      <hr>
+    </nav>
 
     <!-- Page Content -->
-    <div class="container">
-    
-      {% block content %}{% endblock %}
+    <section>
+      <div>
+      
+        {% block content %}{% endblock %}
 
-    </div>
-    <!-- /.container -->
+      </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-
+      <hr>
+      <p>Desarrollado por Daniel Feito Pin, Ignacio Borregán Naya y Paula Serrano Chans para PI.</p>
     </footer>
 
   </body>

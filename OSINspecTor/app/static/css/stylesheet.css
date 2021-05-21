@@ -1,0 +1,43 @@
+:root {
+    --color1: #121a36;  /* Background */
+    --color2: #ffffff;/* Text */
+    --color3: #0900C3;/* Borders */
+    --color4: #0900C3; /* Bars */
+}
+
+body {
+    /* Background */
+    background-color: var(--color1);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    
+    /* Text */
+    font-size: calc(1em + 1vmin);
+    font-family: "Archivo Narrow", sans-serif;
+    text-align: center;
+    color: var(--color2);
+}
+
+footer {
+    font-family: "Archivo Narrow", sans-serif;
+    font-size: calc(0.25em + 1vmin);
+}
+
+/* Links */
+a:link {
+    color: var(--color2);
+}
+
+a:visited {
+    color: var(--color2);
+}
+
+a:hover {
+    color: var(--color3);
+}
+
+a:active {
+    color: var(--color4);
+}
