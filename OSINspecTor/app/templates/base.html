@@ -19,7 +19,7 @@
     <script src="{% static "vendor/bootstrap/js/bootstrap.min.js"%}"></script>
     
     <!-- jQuery -->
-    <script src="{% static "vendor/jquery/jquery.min.js"%}"></script>
+    <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static "css/stylesheet.css" %}" />
@@ -42,11 +42,11 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'index'%}">Búsqueda por Dominio
+              <a class="nav-link" href="{% url 'dominio'%}">Búsqueda por Dominio
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'index'%}">Búsqueda por IP
+              <a class="nav-link" href="{% url 'ip'%}">Búsqueda por IP
               </a>
             </li>
           </ul>
@@ -67,6 +67,10 @@
       <hr>
       <p>Desarrollado por Daniel Feito Pin, Ignacio Borregán Naya y Paula Serrano Chans para PI.</p>
     </footer>
+
+    <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
+
   </body>
 
 </html>

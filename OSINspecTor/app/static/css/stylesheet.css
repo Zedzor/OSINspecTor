@@ -1,7 +1,7 @@
 :root {
     --color1: #121a36;  /* Background */
     --color2: #ffffff;/* Text */
-    --color3: #0900C3;/* Borders */
+    --color3: #e3f2fd;/* Nav bar */
     --color4: #0900C3; /* Bars */
 }
 
@@ -21,6 +21,10 @@ body {
 
     /* margins */
     padding-top: 9vh;
+}
+
+p.indexp {
+    text-align: justify;
 }
 
 footer {
@@ -46,7 +50,7 @@ a:active {
 }
 
 #nav-custom {
-    background-color: #e3f2fd;
+    background-color: var(--color3);
 }
 
 @media (min-width: 992px){
