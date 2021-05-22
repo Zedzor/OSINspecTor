@@ -32,6 +32,13 @@ footer {
     font-size: calc(0.25em + 1vmin);
 }
 
+button {
+    border-radius: 20px;
+    background-color: green;
+    color: white;
+    padding: 50px;
+}
+
 /* Links */
 a:link {
     color: var(--color2);
