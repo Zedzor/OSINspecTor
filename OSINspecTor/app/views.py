@@ -1,7 +1,8 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render
-from django.http import HttpResponse
-from app.models import Buttons
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from app.models import Buttons, Methods
 from app.model.geo import get_geo
 from app.model.ip.reverse import get_reverse
 from app.model.domain.subdomains import get_subdomains
@@ -19,14 +20,26 @@ def dominio(request: HttpRequest):
     }
     return render(request, 'busqueda.html', contex)
 
+@csrf_exempt
 def ip(request: HttpRequest):
+    if request.method == 'GET':
+        contex = {
+            'cabecera': "Búsqueda por IP",
+            'form_label': 'Introduzca una IP:',
+            'buttons': Buttons.get_ip_labels(),
+        }
+        return render(request, 'busqueda.html', contex)
 
-    contex = {
-        'cabecera': "Búsqueda por IP",
-        'form_label': 'Introduzca una IP:',
-        'buttons': Buttons.get_ip_labels(),
-    }
-    return render(request, 'busqueda.html', contex)
+    if request.method == 'POST':
+        ip = request.POST['dir']
+        method= request.POST['method']
+        if method in Methods.METHS:
+            fun=Methods.METHS[method]
+            response=fun(ip)
+            return JsonResponse({"results": response})
+    
+    return HttpResponse("Peticion no valida")
+
 
 def rev(request):
     if request.method == 'POST':

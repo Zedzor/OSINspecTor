@@ -1,4 +1,4 @@
-{% extends "base.html" %} {%block content%}
+{% extends "base.html" %} {% load static %} {%block content%}
 
 <div>
   <p><h1>{{ cabecera }}</h1></p>
@@ -7,13 +7,20 @@
 <div>
   <form id="form-search" autocomplete="off" onsubmit="return false">
     <label for="form_input">{{ form_label }}</label>
-    <input id="form_input" class="focusable form-element" type="text"/>
+    <input id="form_input" class="focusable form-element mx-sm-1" type="text"/>
   </form>
 </div>
 
 {% for id,label in buttons %}
-    <button id="{{ id }}" class="btn btn-outline-secondary" type="button"><i class="material-icons right">{{ label }}</i></button>
+    <button id="{{ id }}" class="btn btn-outline-light mx-sm-1 my-sm-2" type="button"><i class="material-icons right">{{ label }}</i></button>
 {% endfor %}
+
+<br>
+<br>
+
+<div id="results" class="container bg-light text-dark"></div>
+
+<script src="{% static "js/ajax.js" %}"></script>
 
 <br>
 
