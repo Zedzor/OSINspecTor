@@ -39,6 +39,10 @@ button {
     padding: 50px;
 }
 
+#results {
+    width: fit-content;
+}
+
 /* Links */
 a:link {
     color: var(--color2);

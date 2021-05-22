@@ -2,10 +2,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from app.models import Buttons, Methods
-from app.model.geo import get_geo
-from app.model.ip.reverse import get_reverse
-from app.model.domain.subdomains import get_subdomains
+from app.functionalities.funcs import Buttons, Methods, DOMAIN_FUNCS, IP_FUNCS
 
 # Create your views here.
 def index(request: HttpRequest):
@@ -32,36 +29,8 @@ def ip(request: HttpRequest):
 
     if request.method == 'POST':
         ip = request.POST['dir']
-        method= request.POST['method']
-        if method in Methods.METHS:
-            fun=Methods.METHS[method]
-            response=fun(ip)
-            return JsonResponse({"results": response})
+        func = Methods.get_method(request.POST['method'], IP_FUNCS)
+        if func is not None:
+            return JsonResponse({"results": func(ip)})
     
     return HttpResponse("Peticion no valida")
-
-
-def rev(request):
-    if request.method == 'POST':
-        ip = request.POST['ip']
-        resolucion = get_reverse(ip)
-        return resolucion
-    else:
-        return HttpResponse("Peticion no valida")
-
-def geo(request):
-    if request.method == 'POST':
-        ip = request.POST['ip']
-        localizacion = get_geo(ip)
-        return localizacion
-    else:
-        return HttpResponse("Peticion no valida")
-
-def sub(request):
-    if request.method == 'POST':
-        domain = request.POST['domain']
-        subdominios = get_subdomains(domain)
-        return subdominios
-    else:
-        return HttpResponse("Peticion no valida")
-    
