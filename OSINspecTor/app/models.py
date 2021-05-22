@@ -6,30 +6,43 @@ from app.model.domain.emails import get_emails
 from app.model.domain.subdomains import get_subdomains
 from app.model.ip.reverse import get_reverse
 
+class Functionality:
+    
+    def __init__(self, button_label: str, button_id: str, func):
+        self.button_label = button_label
+        self.button_id = button_id
+        self.func = func
+
+FUNCS = {
+    1: Functionality('Subdominios', 'btn_sub', get_subdomains), #Dominios
+    2: Functionality('Geolocalizar', 'btn_geo', get_geo), #Dominios e IP
+    3: Functionality('DNS', 'btn_dns', None), #Dominios
+    4: Functionality('MX', 'btn_mx', None), #Dominios
+    5: Functionality('Emails', 'btn_em', get_emails), #Dominios
+    6: Functionality('Reverse', 'btn_rev', get_reverse), #IP
+    7: Functionality('IP range', 'btn_ran', None), #Dominios
+    8: Functionality('Vulns', 'btn_vul', None), #Dominios e IP
+}
+
+DOMAIN_FUNCS= (1,2,5)
+#DOMAIN_FUNCS= (1,2,3,4,5,7,8)
+IP_FUNCS = (2,6)
+#IP_FUNCS = (6,8)
+
 
 class Buttons:
-    LABELS = {
-        1: ('btn_sub', 'Subdominios'), #Dominios
-        2: ('btn_geo', 'Geolocalizar'), #Dominios e IP
-        3: ('btn_dns', 'DNS'), #Dominios
-        4: ('btn_mx', 'MX'), #Dominios
-        5: ('btn_em', 'Emails'), #Dominios
-        6: ('btn_rev', 'Reverse'), #IP
-        7: ('btn_ran', 'IP range'), #Dominios
-        8: ('btn_vul', 'Vulns'), #Dominios e IP
-    }
 
     @staticmethod
-    def _get_labels(l: tuple):
+    def _get_labels(l: tuple) -> tuple: # (ID, Label)
         labels = []
         for i in l:
-            labels.append((Buttons.LABELS[i][0], Buttons.LABELS[i][1]))
+            labels.append((FUNCS[i].button_id, FUNCS[i].button_label))
         return labels
 
     @staticmethod
-    def get_domain_labels():
-        return Buttons._get_labels((1,2,5))
+    def get_domain_labels() -> tuple:
+        return Buttons._get_labels(DOMAIN_FUNCS)
 
     @staticmethod
     def get_ip_labels():
-        return Buttons._get_labels((2,6))
+        return Buttons._get_labels(IP_FUNCS)
