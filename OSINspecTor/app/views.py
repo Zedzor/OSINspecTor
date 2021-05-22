@@ -2,9 +2,9 @@ from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.http import HttpResponse
 from app.utils.buttons import Buttons
-from app.model import get_geo
-from app.model.ip import get_reverse
-from app.model.domain import get_subdomains
+from app.model.geo import get_geo
+from app.model.ip.reverse import get_reverse
+from app.model.domain.subdomains import get_subdomains
 
 # Create your views here.
 def index(request: HttpRequest):
