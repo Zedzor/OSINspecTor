@@ -11,8 +11,8 @@
   </form>
 </div>
 
-{% for b in buttons %}
-    <button class="btn btn-outline-secondary" type="button"><i class="material-icons right">{{ b.0 }}</i></button>
+{% for id,label in buttons %}
+    <button id="{{ id }}" class="btn btn-outline-secondary" type="button"><i class="material-icons right">{{ label }}</i></button>
 {% endfor %}
 
 <br>
