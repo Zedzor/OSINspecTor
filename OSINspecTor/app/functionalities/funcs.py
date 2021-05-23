@@ -63,5 +63,5 @@ def form_post(request: HttpRequest, l: tuple):
     if func is not None:
         try: 
             return JsonResponse({"results": func(dir)})
-        except:
-            return HttpResponse("Error al procesar la solicitud")
+        except Exception as e:
+            return JsonResponse({"results": f"Error: {e}"},status=418)

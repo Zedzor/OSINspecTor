@@ -1,11 +1,16 @@
 const results_div = document.getElementById("results");
 const res = window.location.pathname.split("/")[1]
+const spinner = document.getElementById("spinner-div");
 
+function messageBox(severity, message){
+    return `<br><div class="alert alert-${severity}" role="alert">${message}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`
+}
 
 
 $('#btn_geo').click(function() {
-    results_div.innerHTML=""
     console.log("click");
+    results_div.innerHTML = ""
+    spinner.style.visibility= "visible";
     dir=$('#form_input').val();
     $.ajax({
         method: 'POST',
@@ -16,7 +21,8 @@ $('#btn_geo').click(function() {
         },
         dataType: "json",
         success: function(response) {
-            aux='<table class="table table-striped">'
+            aux='<div class="container bg-light text-dark">'
+            aux+='<table class="table table-striped">'
             aux+='<thead><tr><th scope="col">Tag</th> <th scope="col">Value</th></tr></thead>'
             aux+='<tbody>'
             aux+=`<tr><td>Latitude</td><td>${response.results.latitude}</td>`
@@ -25,15 +31,23 @@ $('#btn_geo').click(function() {
             aux+=`<tr><td>Region</td><td>${response.results.region}</td>`
             aux+=`<tr><td>Country</td><td>${response.results.country}</td>`
             aux+=`<tr><td>Flag</td><td>${response.results.flag}</td>`
-            aux+='</tbody></table>'
+            aux+='</tbody></table></div>'
+            spinner.style.visibility= "hidden";
             results_div.innerHTML = aux
+        },
+        error: function(response){
+            message=response.responseJSON.results;
+            console.log(message);
+            results_div.innerHTML=messageBox("danger",message)
+            spinner.style.visibility= "hidden";
         }
     }); 
 });
 
 $('#btn_em').click(function() {
+    results_div.innerHTML = messageBox("info", "La búsqueda de emails tarda aproximadamente 30 segundos.")
     document.getElementById("btn_em").disabled = true;
-    results_div.innerHTML="";
+    spinner.style.visibility= "visible";
     console.log("click");
     dir=$('#form_input').val();
     $.ajax({
@@ -45,7 +59,8 @@ $('#btn_em').click(function() {
         },
         dataType: "json",
         success: function(response) {
-            aux='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+            aux='<div class="container bg-light text-dark">'
+            aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
             aux+='<table class="table table-bordered table-striped mb-0">'
             aux+='<thead><tr><th scope="col">#</th><th scope="col">Email</th></tr></thead>'
             aux+='<tbody>'
@@ -53,20 +68,26 @@ $('#btn_em').click(function() {
                 aux+=`<tr><td>${element}</td><td>${response.results[element]}</td></tr>`     
             });
 
-            aux+='</tbody></table>'
+            aux+='</tbody></table></div>'
+            spinner.style.visibility= "hidden";
             results_div.innerHTML = aux
             document.getElementById("btn_em").disabled = false;
         },
         error: function(response) {
-            console.log("errroooor: ", response)
             document.getElementById("btn_em").disabled = false;
+            message=response.responseJSON.results;
+            console.log(message);
+            results_div.innerHTML=messageBox("danger",message)
+            
+            spinner.style.visibility= "hidden";
         },
     }); 
 });
 
 $('#btn_rev').click(function() {
-    results_div.innerHTML=""
     console.log("click");
+    results_div.innerHTML = ""
+    spinner.style.visibility= "visible";
     dir=$('#form_input').val();
     $.ajax({
         method: 'POST',
@@ -77,7 +98,15 @@ $('#btn_rev').click(function() {
         },
         dataType: "json",
         success: function(response) {
-            results_div.innerHTML= `<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p>`
+            spinner.style.visibility= "hidden";
+            aux='<div class="container bg-light text-dark">'
+            results_div.innerHTML= aux+`<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p></div>`
+        },
+        error: function(response){
+            message=response.responseJSON.results;
+            console.log(message);
+            results_div.innerHTML=messageBox("danger",message)
+            spinner.style.visibility= "hidden";
         }
     }); 
 });

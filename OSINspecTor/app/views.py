@@ -21,7 +21,7 @@ def dominio(request: HttpRequest):
     if request.method == 'POST':
         return form_post(request, DOMAIN_FUNCS)
 
-    return HttpResponse("Peticion no valida")
+    return JsonResponse({"results":"Petición no valida."},status=405)
 
 
 @csrf_exempt
@@ -37,4 +37,4 @@ def ip(request: HttpRequest):
     if request.method == 'POST':
         return form_post(request, IP_FUNCS)
 
-    return HttpResponse("Peticion no valida")
+    return JsonResponse({"results":"Petición no valida."},status=405)

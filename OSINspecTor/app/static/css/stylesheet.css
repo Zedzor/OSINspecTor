@@ -43,6 +43,14 @@ button {
     width: fit-content;
 }
 
+#spinner-div{
+    visibility: hidden;
+}
+
+.spinner-border{
+    color: var(--color3);
+}
+
 .my-custom-scrollbar {
     position:  relative;
     height: 50vh;
