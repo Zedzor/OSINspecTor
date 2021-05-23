@@ -32,7 +32,8 @@ $('#btn_geo').click(function() {
 });
 
 $('#btn_em').click(function() {
-    results_div.innerHTML=""
+    document.getElementById("btn_em").disabled = true;
+    results_div.innerHTML="";
     console.log("click");
     dir=$('#form_input').val();
     $.ajax({
@@ -46,11 +47,6 @@ $('#btn_em').click(function() {
         success: function(response) {
             aux='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
             aux+='<table class="table table-bordered table-striped mb-0">'
-            // aux+='<thead><tr><th scope="col">Email</th></tr></thead>'
-            // aux+='<tbody>'
-            // Object.values(response.results).forEach(element => {
-            //     aux+=`<tr><td>${element}</td></tr>`     
-            // });
             aux+='<thead><tr><th scope="col">#</th><th scope="col">Email</th></tr></thead>'
             aux+='<tbody>'
             Object.keys(response.results).forEach(element => {
@@ -59,9 +55,11 @@ $('#btn_em').click(function() {
 
             aux+='</tbody></table>'
             results_div.innerHTML = aux
+            document.getElementById("btn_em").disabled = false;
         },
         error: function(response) {
             console.log("errroooor: ", response)
+            document.getElementById("btn_em").disabled = false;
         },
     }); 
 });
