@@ -2,6 +2,8 @@ from app.functionalities.common.geo import get_geo
 from app.functionalities.domain.emails import get_emails
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
+from django.http import HttpResponse, JsonResponse
+from django.http.request import HttpRequest
 
 class Functionality:
     
@@ -51,5 +53,15 @@ class Buttons:
         return Buttons._get_labels(DOMAIN_FUNCS)
 
     @staticmethod
-    def get_ip_labels():
+    def get_ip_labels() -> tuple:
         return Buttons._get_labels(IP_FUNCS)
+
+
+def form_post(request: HttpRequest, l: tuple):
+    dir = request.POST['dir']
+    func = Methods.get_method(request.POST['method'], l)
+    if func is not None:
+        try: 
+            return JsonResponse({"results": func(dir)})
+        except:
+            return HttpResponse("Error al procesar la solicitud")
