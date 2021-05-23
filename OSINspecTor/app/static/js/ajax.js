@@ -98,8 +98,12 @@ $('#btn_rev').click(function() {
         dataType: "json",
         success: function(response) {
             spinner.style.visibility= "hidden";
-            aux='<div class="container bg-light text-dark">'
-            results_div.innerHTML= aux+`<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p></div>`
+            if (response.results==null){
+                results_div.innerHTML=messageBox("warning", "Esta ip no tiene un nombre de dominio asociado")
+            } else {
+                aux='<div class="container bg-light text-dark">'
+                results_div.innerHTML= aux+`<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p></div>`
+            }
         },
         error: function(response){
             message=response.responseJSON.results;
