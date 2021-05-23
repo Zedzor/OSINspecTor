@@ -31,6 +31,41 @@ $('#btn_geo').click(function() {
     }); 
 });
 
+$('#btn_em').click(function() {
+    results_div.innerHTML=""
+    console.log("click");
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: `{% url '${res}' %}`,
+        data: {
+            'dir': dir, 
+            'method': "em",
+        },
+        dataType: "json",
+        success: function(response) {
+            aux='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+            aux+='<table class="table table-bordered table-striped mb-0">'
+            // aux+='<thead><tr><th scope="col">Email</th></tr></thead>'
+            // aux+='<tbody>'
+            // Object.values(response.results).forEach(element => {
+            //     aux+=`<tr><td>${element}</td></tr>`     
+            // });
+            aux+='<thead><tr><th scope="col">#</th><th scope="col">Email</th></tr></thead>'
+            aux+='<tbody>'
+            Object.keys(response.results).forEach(element => {
+                aux+=`<tr><td>${element}</td><td>${response.results[element]}</td></tr>`     
+            });
+
+            aux+='</tbody></table>'
+            results_div.innerHTML = aux
+        },
+        error: function(response) {
+            console.log("errroooor: ", response)
+        },
+    }); 
+});
+
 $('#btn_rev').click(function() {
     results_div.innerHTML=""
     console.log("click");

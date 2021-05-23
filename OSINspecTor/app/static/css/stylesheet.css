@@ -43,6 +43,17 @@ button {
     width: fit-content;
 }
 
+.my-custom-scrollbar {
+    position:  relative;
+    height: 50vh;
+    /* width: 40vw; */
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}
+
 /* Links */
 a:link {
     color: var(--color2);
