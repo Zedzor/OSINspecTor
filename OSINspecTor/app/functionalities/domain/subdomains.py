@@ -15,9 +15,10 @@ def get_subdomains(dominio: str) -> dict:
 
 		with BytesIO() as buff:
 			plt.savefig(buff, format='png')
+			plt.clf()
 			buff.seek(0)
 			figdata = base64.b64encode(buff.read())
-			return figdata
+			return figdata.decode('utf-8')
 
 	suburl = "https://sonar.omnisint.io/all/"+dominio
 	data = requests.get(suburl)

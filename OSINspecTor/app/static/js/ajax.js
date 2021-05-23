@@ -78,7 +78,6 @@ $('#btn_em').click(function() {
             message=response.responseJSON.results;
             console.log(message);
             results_div.innerHTML=messageBox("danger",message)
-            
             spinner.style.visibility= "hidden";
         },
     }); 
@@ -108,5 +107,48 @@ $('#btn_rev').click(function() {
             results_div.innerHTML=messageBox("danger",message)
             spinner.style.visibility= "hidden";
         }
+    }); 
+});
+
+$('#btn_sub').click(function() {
+    document.getElementById("btn_sub").disabled = true;
+    results_div.innerHTML = ""
+    spinner.style.visibility= "visible";
+    console.log("click");
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: `{% url '${res}' %}`,
+        data: {
+            'dir': dir, 
+            'method': "sub",
+        },
+        dataType: "json",
+        success: function(response) {
+            tablejson=response.results.df_dict
+            imagebase=response.results.graph
+            aux=`<img id="mat-img" src="data:image/png; base64, ${imagebase}"><br><br>`
+            aux+='<div class="container bg-light text-dark">'
+            aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+            aux+='<table class="table table-bordered table-striped mb-0">'
+            aux+='<thead><tr><th scope="col">#</th><th scope="col">Nombre</th><th scope="col">Dirección</th><th scope="col">Tipo</th></tr></thead>'
+            aux+='<tbody>'
+            pos=0
+            Object.keys(tablejson.name).forEach(element => {
+                aux+=`<tr><td>${element}</td><td>${tablejson.name[element]}</td><td>${tablejson.value[pos]}</td><td>${tablejson.type[pos]}</td></tr>` 
+                pos+=1;    
+            });
+            aux+='</tbody></table></div>'
+            spinner.style.visibility= "hidden";
+            results_div.innerHTML = aux
+            document.getElementById("btn_sub").disabled = false;
+        },
+        error: function(response) {
+            document.getElementById("btn_sub").disabled = false;
+            message=response.responseJSON.results;
+            console.log(message);
+            results_div.innerHTML=messageBox("danger",message)
+            spinner.style.visibility= "hidden";
+        },
     }); 
 });

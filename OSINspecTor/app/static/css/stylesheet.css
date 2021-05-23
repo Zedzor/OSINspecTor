@@ -62,6 +62,11 @@ button {
     display: block;
 }
 
+img#mat-img{
+    width: auto;
+    height: 40vh;
+}
+
 /* Links */
 a:link {
     color: var(--color2);
