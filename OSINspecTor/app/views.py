@@ -2,39 +2,38 @@ from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from app.functionalities.funcs import Buttons, Methods, DOMAIN_FUNCS, IP_FUNCS, form_post
+from app.functionalities.funcs import FuncsConfig
 
 # Create your views here.
 def index(request: HttpRequest):
     return render(request, 'index.html')
 
-@csrf_exempt
-def dominio(request: HttpRequest):
-    if request.method == 'GET':    
-        contex = {
-            'cabecera': "Búsqueda por dominio",
-            'form_label': 'Introduzca un dominio:',
-            'buttons': Buttons.get_domain_labels(),
-        }
-        return render(request, 'busqueda.html', contex)
+
+def _dominio_e_ip(request: HttpRequest, context: dict, funcs: tuple):
+    if request.method == 'GET':
+        return render(request, 'busqueda.html', context)
 
     if request.method == 'POST':
-        return form_post(request, DOMAIN_FUNCS)
+        return FuncsConfig.get_results(request, funcs)
 
-    return JsonResponse({"results":"Petición no valida."},status=405)
+    return JsonResponse({"results":"Petición no valida."}, status=405)
 
+@csrf_exempt
+def dominio(request: HttpRequest):
+    FUNCS = FuncsConfig.domain_funcs
+    context = {
+        'cabecera': "Búsqueda por dominio",
+        'form_label': 'Introduzca un dominio:',
+        'buttons': FuncsConfig.get_buttons_info(FUNCS),
+    }
+    return _dominio_e_ip(request, context, FUNCS)
 
 @csrf_exempt
 def ip(request: HttpRequest):
-    if request.method == 'GET':
-        contex = {
-            'cabecera': "Búsqueda por IP",
-            'form_label': 'Introduzca una IP:',
-            'buttons': Buttons.get_ip_labels(),
-        }
-        return render(request, 'busqueda.html', contex)
-
-    if request.method == 'POST':
-        return form_post(request, IP_FUNCS)
-
-    return JsonResponse({"results":"Petición no valida."},status=405)
+    FUNCS = FuncsConfig.ip_funcs
+    context = {
+        'cabecera': "Búsqueda por IP",
+        'form_label': 'Introduzca una IP:',
+        'buttons': FuncsConfig.get_buttons_info(FUNCS),
+    }
+    return _dominio_e_ip(request, context, FUNCS)
