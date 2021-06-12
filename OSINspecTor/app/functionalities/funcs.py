@@ -2,7 +2,7 @@ from app.functionalities.common.geo import get_geo
 from app.functionalities.domain.emails import get_emails
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.http.request import HttpRequest
 
 class Functionality:
@@ -34,10 +34,11 @@ class FuncsConfig:
     IP_MODE = 'IP'
 
     @classmethod
-    def _get_buttons_info(cls, options: tuple) -> list[tuple[str, str]]: # [('ID', 'Label'),]
+    def _get_buttons_info(cls, options: tuple) -> list[tuple[str, str]]:
         labels = []
         for option in options:
-            labels.append((cls.FUNCS[option].button_id, cls.FUNCS[option].button_label))
+            info = cls.FUNCS[option]
+            labels.append((info.button_id, info.button_label))
         return labels
 
     @classmethod
@@ -74,6 +75,6 @@ class FuncsConfig:
             except Exception as e:
                 results = JsonResponse({'results': f'Error: {e}'}, status=501)
             else:
-                results = JsonResponse({'results': func(dir)})
+                results = func(dir)
         finally:
             return results
