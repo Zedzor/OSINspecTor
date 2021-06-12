@@ -9,31 +9,34 @@ def index(request: HttpRequest):
     return render(request, 'index.html')
 
 
-def _dominio_e_ip(request: HttpRequest, context: dict, funcs: tuple):
+def _dominio_e_ip(request: HttpRequest, context: dict, mode: str):
     if request.method == 'GET':
         return render(request, 'busqueda.html', context)
-
-    if request.method == 'POST':
-        return FuncsConfig.get_results(request, funcs)
-
-    return JsonResponse({"results":"Petición no valida."}, status=405)
+    elif request.method == 'POST':
+        try:
+            option = request.POST['method']
+            dir = request.POST['dir']
+        except Exception as e:
+            return JsonResponse({'results': f'Error: {e}'}, status=400)
+        else:
+            return FuncsConfig.get_results(option, dir, mode)
+    else:
+        return JsonResponse({'results': 'Método no permitido.'}, status=405)
 
 @csrf_exempt
 def dominio(request: HttpRequest):
-    FUNCS = FuncsConfig.domain_funcs
     context = {
-        'cabecera': "Búsqueda por dominio",
+        'cabecera': 'Búsqueda por dominio',
         'form_label': 'Introduzca un dominio:',
-        'buttons': FuncsConfig.get_buttons_info(FUNCS),
+        'buttons': FuncsConfig.get_domain_buttons(),
     }
-    return _dominio_e_ip(request, context, FUNCS)
+    return _dominio_e_ip(request, context, FuncsConfig.DOMAIN_MODE)
 
 @csrf_exempt
 def ip(request: HttpRequest):
-    FUNCS = FuncsConfig.ip_funcs
     context = {
-        'cabecera': "Búsqueda por IP",
+        'cabecera': 'Búsqueda por IP',
         'form_label': 'Introduzca una IP:',
-        'buttons': FuncsConfig.get_buttons_info(FUNCS),
+        'buttons': FuncsConfig.get_ip_buttons(),
     }
-    return _dominio_e_ip(request, context, FUNCS)
+    return _dominio_e_ip(request, context, FuncsConfig.IP_MODE)
