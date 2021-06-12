@@ -6,8 +6,11 @@ def get_reverse(ip):
 	REVURL = 'https://sonar.omnisint.io/reverse/'
 	try:
 		data = requests.get(f'{REVURL}{ip}')
-		response = JsonResponse({'results':data.json()})
+		if data.status_code == 200:
+			response = JsonResponse({'results': data.json()})
+		else:
+			response = JsonResponse({'results': "Error: "}, status=data.status_code)
 	except Exception as e:
-		response = JsonResponse({'results':f'Este servicio no está disponible en este momento: {e}'}, status=503)
+		response = JsonResponse({'results': f'Este servicio no está disponible en este momento: {e}'}, status=503)
 	finally:
 		return response
