@@ -72,7 +72,7 @@ class FuncsConfig:
                 if func is None:
                     raise Exception('Funcionalidad no implementada todavía.')
             except Exception as e:
-                results = JsonResponse({'results': f'Error: {e}'}, status=400)
+                results = JsonResponse({'results': f'Error: {e}'}, status=501)
             else:
                 results = JsonResponse({'results': func(dir)})
         finally:
