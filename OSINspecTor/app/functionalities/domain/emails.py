@@ -3,9 +3,10 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from pandas import Series
+from django.http import JsonResponse
 
 def get_emails(domain): 
-    sercode=True; 
+    sercode=True
     try:    
         def email_on_url(page, domain):
             soup = BeautifulSoup(page.text, 'html.parser')
@@ -23,10 +24,13 @@ def get_emails(domain):
         if lista == []:
             sercode=False
             raise Exception("No se encontraron resultados para ese dominio")
-        return Series(lista).sort_values().drop_duplicates().reset_index(drop=True).to_dict()
+        series = Series(lista).sort_values().drop_duplicates().reset_index(drop=True).to_dict()
+        response = JsonResponse({'results':series})
 
     except Exception as e:
         if sercode:
-            raise Exception(f"Este servicio no está disponible en este momento {e}")
+            response = JsonResponse({'results':f'Este servicio no está disponible en este momento: {e}'}, status=429)
         else:
-            raise Exception(e)
+            response = JsonResponse({'results':f'{e}'}, status=404)
+    finally:
+        return response
