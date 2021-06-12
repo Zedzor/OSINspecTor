@@ -28,8 +28,9 @@ def get_geo(dir: str) -> JsonResponse:
             }
             response = JsonResponse({'results': geo_info})
         else:
-            response = JsonResponse({'results': f"Error: {code}"}, status=code)
-    except Exception as e: 
-        response = JsonResponse({'results': f"{e}"}, status=503)
+            response = JsonResponse({'results': f'Error: {code}'}, status=code)
+    except Exception as e:
+        msg = 'Este servicio no está disponible en este momento:'
+        response = JsonResponse({'results': f'{msg} {e}'}, status=503)
     finally:
         return response
