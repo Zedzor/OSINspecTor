@@ -1,8 +1,8 @@
-from django.http.response import JsonResponse
 import requests
 from flag import flag
+from django.http.response import JsonResponse
 
-def get_geo(dir):
+def get_geo(dir: str) -> JsonResponse:
 
     def quitar_nulos(foo):
         return foo if foo is not None else 'Desconocido'
@@ -13,7 +13,7 @@ def get_geo(dir):
     API = 'http://api.ipstack.com/'
     CONSUMER_KEY = '1238e7183b2c121459bf1c32536954e8'
     
-    try:    
+    try:
         data = requests.get(f'{API}{dir}?access_key={CONSUMER_KEY}')
         code = data.status_code
         if code == 200:

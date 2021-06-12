@@ -1,9 +1,9 @@
 from app.functionalities.common.geo import get_geo
+from app.functionalities.common.vuln import get_vulns
 from app.functionalities.domain.emails import get_emails
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
 from django.http import JsonResponse
-from django.http.request import HttpRequest
 
 class Functionality:
 
@@ -22,7 +22,7 @@ class FuncsConfig:
         'em': Functionality('Emails', 'btn_em', get_emails), #F5
         'rev': Functionality('Reverse', 'btn_rev', get_reverse), #F6
         'ran': Functionality('IP range', 'btn_ran', None), #F7
-        'vul': Functionality('Vulns', 'btn_vul', None), #F8
+        'vul': Functionality('Vulns', 'btn_vul', get_vulns), #F8
     }
 
     DOMAIN_FUNCS = ('sub', 'geo', 'dns', 'mx', 'em', 'ran', 'vul')
@@ -51,7 +51,7 @@ class FuncsConfig:
 
 
     @classmethod
-    def get_results(cls, option: str, dir: str, mode: str):
+    def get_results(cls, option: str, dir: str, mode: str) -> JsonResponse:
         try:
             if mode == cls.DOMAIN_MODE:
                 if option not in cls.DOMAIN_FUNCS:
