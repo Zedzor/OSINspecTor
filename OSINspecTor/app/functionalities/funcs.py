@@ -14,7 +14,7 @@ class Functionality:
 
 class FuncsConfig:
     
-    funcs = {
+    FUNCS = {
         'sub': Functionality('Subdominios', 'btn_sub', get_subdomains), #F1
         'geo': Functionality('Geolocalizar', 'btn_geo', get_geo), #F2
         'dns': Functionality('DNS', 'btn_dns', None), #F3
@@ -25,24 +25,55 @@ class FuncsConfig:
         'vul': Functionality('Vulns', 'btn_vul', None), #F8
     }
 
-    domain_funcs = ('sub', 'geo', 'dns', 'mx', 'em', 'ran', 'vul')
+    DOMAIN_FUNCS = ('sub', 'geo', 'dns', 'mx', 'em', 'ran', 'vul')
 
-    ip_funcs = ('geo', 'rev', 'vul')
+    IP_FUNCS = ('geo', 'rev', 'vul')
 
-    @staticmethod
-    def get_buttons_info(t: tuple) -> tuple: # (ID, Label)
-        funcs = FuncsConfig.funcs
+    DOMAIN_MODE = 'DOMAIN'
+
+    IP_MODE = 'IP'
+
+    @classmethod
+    def _get_buttons_info(cls, options: tuple) -> list[tuple[str, str]]: # [('ID', 'Label'),]
         labels = []
-        for option in t:
-            labels.append((funcs[option].button_id, funcs[option].button_label))
+        for option in options:
+            labels.append((cls.FUNCS[option].button_id, cls.FUNCS[option].button_label))
         return labels
 
-    @staticmethod
-    def get_results(request: HttpRequest, t: tuple):
-        dir = request.POST['dir']
-        func = FuncsConfig.funcs[request.POST['method']].func
-        if func is not None:
-            try: 
-                return JsonResponse({"results": func(dir)})
+    @classmethod
+    def get_domain_buttons(cls) -> list[tuple[str, str]]:
+        return cls._get_buttons_info(cls.DOMAIN_FUNCS)
+
+    @classmethod
+    def get_ip_buttons(cls) -> list[tuple[str, str]]:
+        return cls._get_buttons_info(cls.IP_FUNCS)
+
+
+    @classmethod
+    def get_results(cls, option: str, dir: str, mode: str):
+        try:
+            if mode == cls.DOMAIN_MODE:
+                if option not in cls.DOMAIN_FUNCS:
+                    raise Exception('Funcionalidad de dominio no válida.')
+                else:
+                    pass # Comprobar dominio
+
+            if mode == cls.IP_MODE:
+                if option not in cls.IP_FUNCS:
+                    raise Exception('Funcionalidad de IP no válida.')
+                else:
+                    pass # Comprobar IP
+
+        except Exception as e:
+            results = JsonResponse({'results': f'Error: {e}'}, status=400)
+        else:
+            try:
+                func = cls.FUNCS[option].func
+                if func is None:
+                    raise Exception('Funcionalidad no implementada todavía.')
             except Exception as e:
-                return JsonResponse({"results": f"Error: {e}"},status=418)
+                results = JsonResponse({'results': f'Error: {e}'}, status=400)
+            else:
+                results = JsonResponse({'results': func(dir)})
+        finally:
+            return results
