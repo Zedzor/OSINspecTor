@@ -80,7 +80,10 @@ img#mat-img{
 a:link {
     color: var(--color2);
 }
-
+div a.tabs {
+    color: var(--color1);
+    margin: 0.2vw;
+}
 table a.cve{
     color: var(--color1);
 }

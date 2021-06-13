@@ -54,6 +54,13 @@
               <a class="nav-link" href="{% url 'ip'%}">Búsqueda por IP
               </a>
             </li>
+
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout_view' %}?next={{ request.path }}">Usuario {{request.user.username}} logout
+              </a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>      
@@ -66,7 +73,6 @@
 
       </div>
     </section>
-
     <!-- Footer -->
     <footer>
       <hr>

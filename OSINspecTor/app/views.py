@@ -77,7 +77,7 @@ def signup_view(request):
             user = authenticate(username=username, password=contraseña)
             login(request, user)
             return redirect('index')
-        return render(request, 'users/signup.html', {'form': form})
+        return render(request, 'signup.html', {'form': form})
 
 def logout_view(request):
     logout(request)
