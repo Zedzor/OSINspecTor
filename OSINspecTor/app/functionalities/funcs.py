@@ -79,8 +79,12 @@ class FuncsConfig:
                 results = f'Error: {e}'
                 status = 501
             else:
-                data = func(dir)
-                results = data['results']
-                status = data['status']
+                try:
+                    data = func(dir)
+                    results = data['results']
+                    status = data['status']
+                except:
+                    results = 'Este servicio no está disponible en este momento:'
+                    status = 503
         finally:
             return {'results': results, 'status': status}
