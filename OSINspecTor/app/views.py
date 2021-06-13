@@ -37,8 +37,8 @@ def _dominio_e_ip(request: HttpRequest, context: dict, mode: str):
         try:
             option = request.POST['method']
             dir = request.POST['dir'].strip()
-            if dir.startswith('www'):
-                dir = dir.replace('www', '')
+            if dir.startswith('www.'):
+                dir = dir.replace('www.', '')
         except Exception as e:
             return JsonResponse({'results': f'Error: {e}'}, status=400)
         else:
