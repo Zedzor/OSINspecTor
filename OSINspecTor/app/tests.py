@@ -22,6 +22,9 @@ class ViewsTestCase(TestCase):
     def test_IP_loads_properly(self):
         response = self.client.get('http://127.0.0.1:8000/ip/')
         self.assertEqual(response.status_code, 200)
+    def test_no_loads_properly(self):
+        response = self.client.get('http://127.0.0.1:8000/efwf')
+        self.assertEqual(response.status_code, 404)
 
 #funciones
 class GeoDomainTestCase(TestCase):
@@ -43,7 +46,14 @@ class  VulDomainTestCase(TestCase):
 class DnsDomainCase(TestCase):
     def test_dns(self):
         info = dns.get_dns("udc.es")
-        self.assertEquals(str(info),"{'results': ['ineco.nic.es', 'nso.nic.es', 'chico.rediris.es', 'sun.rediris.es', 'zape.udc.es', 'zipi.udc.es'], 'status': 200}")
+        if info["status"] == 200:
+                self.assertEquals(str(info),"{'results': ['ineco.nic.es', 'nso.nic.es', 'chico.rediris.es', 'sun.rediris.es', 'zape.udc.es', 'zipi.udc.es'], 'status': 200}")
+        else:
+            if info["status"] == 429:
+                self.assertEquals(str(info), "{'results': 'Error: 429 Too Many Requests', 'status': 429}")
+            else:
+                self.assertEqual(info["status"], 404)
+        
 
 class RevIPCaseNoDomain(TestCase):
     def test_rev(self):
@@ -56,19 +66,35 @@ class RevIPCaseNoDomain(TestCase):
 class MxDomainCase(TestCase):
     def test_mx(self):
         info = mx.get_mx("udc.es")
-        self.assertEquals(str(info),"{'results': ['mail.rediris.es', 'mx.udc.es', 'mx2.udc.es', 'udc-es.mail.protection.outlook.com'], 'status': 200}")
+        if info["status"] == 200:
+            self.assertEquals(str(info),"{'results': ['mail.rediris.es', 'mx.udc.es', 'mx2.udc.es', 'udc-es.mail.protection.outlook.com'], 'status': 200}")
+        else: 
+            if info["status"] == 429:
+                self.assertEquals(str(info), "{'results': 'Error: 429 Too Many Requests', 'status': 429}")
+            else:
+                self.assertEqual(info["status"], 404)
 
 class RangeDomainCase(TestCase):
     def test_range(self):
         info = range.get_range("udc.es")
         self.assertEqual(str(info),"{'results': '193.144.48.0 - 193.144.63.255', 'status': 200}")
 
-#class EmailsDomainCase(TestCase):
-#    def test_email(self):
-#        info = emails.get_emails("udc.es")
-#        self.assertEqual(str(info),"{'results': {0: 'a.regueiro@udc.es', 1: [1753 chars]200}")
+class EmailsDomainCase(TestCase):
+    def test_email(self):
+        info = emails.get_emails("udc.es")
+        if info["status"] == 200:
+            self.assertEqual(info["status"],200)
+        else:
+            if info["status"] == 429:
+                self.assertEqual(str(info),"{'results': 'Este servicio no está disponible en este momento:', 'status': 429}")
+            else:
+                self.assertEqual(info["status"], 404)
+
         
-#class SubDomainCase(TestCase):
-#    def test_subdomains(self):
-#        info = subdomains.get_subdomains("udc.es")
-#        self.assertEqual(info[status], 200)
+class SubDomainCase(TestCase):
+    def test_subdomains(self):
+        info = subdomains.get_subdomains("udc.es")
+        if info["status"] == 200:
+            self.assertEqual(info["status"], 200)
+        else:
+            self.assertEqual(info["status"], 404)

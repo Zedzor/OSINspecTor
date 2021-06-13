@@ -6,6 +6,8 @@ from app.functionalities.domain.mx import get_mx
 from app.functionalities.domain.range import get_range
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
+from app.functionalities.utils.checkdomain import check_domain
+from app.functionalities.utils.checkip import check_ip
 
 class Functionality:
 
@@ -59,13 +61,15 @@ class FuncsConfig:
                 if option not in cls.DOMAIN_FUNCS:
                     raise Exception('Funcionalidad de dominio no válida.')
                 else:
-                    pass # Comprobar dominio
+                    if not check_domain(dir):
+                        raise Exception('Dominio no válido.')
 
             if mode == cls.IP_MODE:
                 if option not in cls.IP_FUNCS:
                     raise Exception('Funcionalidad de IP no válida.')
                 else:
-                    pass # Comprobar IP
+                    if not check_ip(dir):
+                        raise Exception('IP no válida.')
 
         except Exception as e:
             results = f'Error: {e}'
