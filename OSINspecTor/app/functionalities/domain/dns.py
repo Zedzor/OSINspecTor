@@ -18,7 +18,7 @@ def get_dns(domain: str) -> dict:
         else:
             results = f'Error: {data.status_code} {data.reason}'
         status = data.status_code
-    except Exception as e:
+    except:
         results = 'Este servicio no está disponible en este momento:'
         status = 503
     finally:
