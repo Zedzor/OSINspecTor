@@ -4,15 +4,16 @@ def get_reverse(ip: str) -> dict:
 
     REVURL = 'https://sonar.omnisint.io/reverse/'
 
-    try:
-        data = get(f'{REVURL}{ip}')
-        if data.status_code == 200:
-            results = data.json()
+    data = get(f'{REVURL}{ip}')
+    if data.status_code == 200:
+        info = data.json()
+        if info is not None and len(info) == 1:
+            results = info
+            status = 200
         else:
-            results = f'Error: {data.status_code} {data.reason}'
+            results = 'Esta IP no tiene un nombre de dominio asociado.'
+            status = 404
+    else:
+        results = f'Error: {data.status_code} {data.reason}'
         status = data.status_code
-    except:
-        results = 'Este servicio no está disponible en este momento:'
-        status = 503
-    finally:
-        return {'results': results, 'status': status}
+    return {'results': results, 'status': status}

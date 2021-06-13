@@ -1,20 +1,22 @@
-from googlesearch import search
-from bs4 import BeautifulSoup
-import requests
+import googlesearch
 import re
+import requests
+from bs4 import BeautifulSoup
 from pandas import Series
-from django.http import JsonResponse
 
-def get_emails(domain): 
+def get_emails(domain: str) -> dict:
+
+    def email_on_url(page, domain):
+        soup = BeautifulSoup(page.text, 'html.parser')
+        return re.findall(f"[A-Za-z0-9.]+@{domain}", soup.get_text())
+
+    def search_in_google(query: str):
+        return googlesearch.search(query, tld="com", num=20, stop=20, pause=2)
+
     sercode=True
     try:    
-        def email_on_url(page, domain):
-            soup = BeautifulSoup(page.text, 'html.parser')
-            return re.findall(f"[A-Za-z0-9.]+@{domain}", soup.get_text())
-
-        query=f"intext:\"@{domain}\""
-        lista=[]
-        for j in search(query,tld="com", num=20,stop=20,pause=2):
+        lista = []
+        for j in search_in_google(f'intext:"@{domain}"'):
             if re.search("\.pdf$", j) is None:
                 try:
                     page = requests.get(j)
@@ -24,13 +26,17 @@ def get_emails(domain):
         if lista == []:
             sercode=False
             raise Exception("No se encontraron resultados para ese dominio")
-        series = Series(lista).sort_values().drop_duplicates().reset_index(drop=True).to_dict()
-        response = JsonResponse({'results':series})
+        series = Series(lista).sort_values().drop_duplicates()
+        series = series.reset_index(drop=True).to_dict()
+        results = series
+        status = 200
 
     except Exception as e:
         if sercode:
-            response = JsonResponse({'results':f'Este servicio no está disponible en este momento: {e}'}, status=429)
+            results = 'Este servicio no está disponible en este momento:'
+            status = 429
         else:
-            response = JsonResponse({'results':f'{e}'}, status=404)
+            results = f'{e}'
+            status = 404
     finally:
-        return response
+        return {'results': results, 'status': status}
