@@ -242,3 +242,34 @@ $('#btn_mx').click(function() {
         },
     }); 
 });
+
+$('#btn_ran').click(function() {
+    console.log("click");
+    results_div.innerHTML = ""
+    spinner.style.visibility= "visible";
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: "{% url 'ip' %}",
+        data: {
+            'dir': dir, 
+            'method': "ran",
+        },
+        dataType: "json",
+        success: function(response) {
+            spinner.style.visibility= "hidden";
+            aux='<div class="container bg-light text-dark">'
+            results_div.innerHTML= aux+`<p>El el rango de direcciones a las que pertenece el dominio ${dir} es: ${response.results}</p></div>`
+        },
+        error: function(response) {
+            message=response.responseJSON.results;
+            console.log(message);
+            if (response.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
+            spinner.style.visibility= "hidden";
+        }
+    }); 
+});
