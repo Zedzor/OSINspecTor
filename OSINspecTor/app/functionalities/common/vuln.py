@@ -1,22 +1,40 @@
 from requests import get
+from socket import gethostbyname
+from random import randrange
 
 def get_vulns(dir: str)  -> dict:
 
-    def quitar_nulos(foo):
-        return foo if foo is not None else 'Desconocido'
+    def get_results(info_json: dict, key: str):
+        if key in info_json:
+            param = info_json[key]
+            param.sort()
+        else:
+            param = 'Desconocido'
+        return param
 
-    API = 'https://api.shodan.io/shodan/host/'
-    CONSUMER_KEY = 'FrrnWjvV9B3u0Ioi2VjEdIcOgqa9PLDM'
+    API = 'https://api.shodan.io/shodan/host/'  
+    CONSUMER_KEYS = [
+        'FrrnWjvV9B3u0Ioi2VjEdIcOgqa9PLDM',
+        '0SyRpxwejxcTAyUWhQ7v7BLAla9y12XD',
+        '74CkfufwScfxmaAY7MUmAftDE9lX5TGE',
+        '2iIkq0lA64RipatiHx9YtNxieBpjRqor',
+        'RGA9cuLe2xkxBjmregqGrlDM0valZBuY',
+        'ZDZZNY7abyomOHsz9d3jCsfT3HXB5Htu',
+    ]
 
     try:
-        data = get(f'{API}{dir}?key={CONSUMER_KEY}')
+        dir = gethostbyname(dir)
+        key = CONSUMER_KEYS[randrange(len(CONSUMER_KEYS))]
+        data = get(f'{API}{dir}?key={key}')
         if data.status_code == 200:
-            info_json = data.json()
-            results = {'ports': quitar_nulos(info_json['ports'])}
+            results = {
+                'ports': get_results(data.json(), 'ports'),
+                'vulns': get_results(data.json(), 'vulns')
+            }
         else:
             results = f'Error: {data.status_code} {data.reason}'
         status = data.status_code
-    except Exception as e:
+    except:
         results = 'Este servicio no está disponible en este momento:'
         status = 503
     finally:
