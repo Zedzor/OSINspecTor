@@ -6,7 +6,6 @@ from app.functionalities.domain.mx import get_mx
 from app.functionalities.domain.range import get_range
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
-from django.http import JsonResponse
 
 class Functionality:
 
@@ -54,7 +53,7 @@ class FuncsConfig:
 
 
     @classmethod
-    def get_results(cls, option: str, dir: str, mode: str) -> JsonResponse:
+    def get_results(cls, option: str, dir: str, mode: str) -> dict:
         try:
             if mode == cls.DOMAIN_MODE:
                 if option not in cls.DOMAIN_FUNCS:
@@ -84,4 +83,4 @@ class FuncsConfig:
                 results = data['results']
                 status = data['status']
         finally:
-            return JsonResponse({'results': results}, status=status)
+            return {'results': results, 'status': status}

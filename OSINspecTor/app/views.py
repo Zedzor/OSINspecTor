@@ -1,6 +1,6 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from app.functionalities.funcs import FuncsConfig
 
@@ -19,7 +19,10 @@ def _dominio_e_ip(request: HttpRequest, context: dict, mode: str):
         except Exception as e:
             return JsonResponse({'results': f'Error: {e}'}, status=400)
         else:
-            return FuncsConfig.get_results(option, dir, mode)
+            data = FuncsConfig.get_results(option, dir, mode)
+            results = data['results']
+            status = data['status']
+            return JsonResponse({'results': results}, status=status)
     else:
         return JsonResponse({'results': 'Método no permitido.'}, status=405)
 
