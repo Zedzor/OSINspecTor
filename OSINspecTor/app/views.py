@@ -10,7 +10,24 @@ from django.shortcuts import redirect, render
 
 # Create your views here.
 def index(request: HttpRequest):
-    return render(request, 'index.html')
+    loginError=""
+
+    if 'username' in request.POST:
+        username=request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+           login(request, user)
+        else:
+             loginError="Error de login"
+    loginForm = LoginForm()
+    signupForm = SignupFrom()
+    if request.user.is_authenticated:
+        context={'user':request.user, 'login_form':loginForm,'signup_form':signupForm,'loginError':loginError}
+    else:
+        context={'login_form':loginForm,'signup_form':signupForm,'loginError':loginError}
+   
+    return render(request, 'index.html', context)
 
 
 def _dominio_e_ip(request: HttpRequest, context: dict, mode: str):
