@@ -77,7 +77,11 @@ $('#btn_em').click(function() {
             document.getElementById("btn_em").disabled = false;
             message=response.responseJSON.results;
             console.log(message);
-            results_div.innerHTML=messageBox("danger",message)
+            if (response.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
             spinner.style.visibility= "hidden";
         },
     }); 
@@ -98,17 +102,17 @@ $('#btn_rev').click(function() {
         dataType: "json",
         success: function(response) {
             spinner.style.visibility= "hidden";
-            if (response.results==null){
-                results_div.innerHTML=messageBox("warning", "Esta ip no tiene un nombre de dominio asociado")
-            } else {
-                aux='<div class="container bg-light text-dark">'
-                results_div.innerHTML= aux+`<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p></div>`
-            }
+            aux='<div class="container bg-light text-dark">'
+            results_div.innerHTML= aux+`<p>El dominio al que pertenece la ip ${dir} es: ${response.results}</p></div>`
         },
-        error: function(response){
+        error: function(response) {
             message=response.responseJSON.results;
             console.log(message);
-            results_div.innerHTML=messageBox("danger",message)
+            if (response.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
             spinner.style.visibility= "hidden";
         }
     }); 
@@ -151,7 +155,11 @@ $('#btn_sub').click(function() {
             document.getElementById("btn_sub").disabled = false;
             message=response.responseJSON.results;
             console.log(message);
-            results_div.innerHTML=messageBox("danger",message)
+            if (response.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
             spinner.style.visibility= "hidden";
         },
     }); 
@@ -183,16 +191,14 @@ $('#btn_dns').click(function() {
             spinner.style.visibility= "hidden";
             results_div.innerHTML = aux
         },
-        error: function(response, statusText, xhr) {
+        error: function(response) {
             message=response.responseJSON.results;
             console.log(message);
-            console.log(xhr.status);
-            if (xhr.status==404){
+            if (response.status==404){
                 results_div.innerHTML=messageBox("warning",message)
             } else {
                 results_div.innerHTML=messageBox("danger",message)
             }
-            
             spinner.style.visibility= "hidden";
         },
     }); 
@@ -224,16 +230,14 @@ $('#btn_mx').click(function() {
             spinner.style.visibility= "hidden";
             results_div.innerHTML = aux
         },
-        error: function(response, statusText, xhr) {
+        error: function(response) {
             message=response.responseJSON.results;
             console.log(message);
-            console.log(xhr.status);
-            if (xhr.status==404){
+            if (response.status==404){
                 results_div.innerHTML=messageBox("warning",message)
             } else {
                 results_div.innerHTML=messageBox("danger",message)
             }
-            
             spinner.style.visibility= "hidden";
         },
     }); 

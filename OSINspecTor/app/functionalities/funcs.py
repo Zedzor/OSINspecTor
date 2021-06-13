@@ -21,7 +21,7 @@ class FuncsConfig:
         'geo': Functionality('Geolocalizar', 'btn_geo', get_geo), #F2
         'dns': Functionality('DNS', 'btn_dns', get_dns), #F3
         'mx': Functionality('MX', 'btn_mx', get_mx), #F4
-        'em': Functionality('Emails', 'btn_em', None), #F5
+        'em': Functionality('Emails', 'btn_em', get_emails), #F5
         'rev': Functionality('Reverse', 'btn_rev', get_reverse), #F6
         'ran': Functionality('IP range', 'btn_ran', get_range), #F7
         'vul': Functionality('Vulns', 'btn_vul', get_vulns), #F8
@@ -84,7 +84,7 @@ class FuncsConfig:
                     results = data['results']
                     status = data['status']
                 except:
-                    results = 'Este servicio no está disponible en este momento:'
+                    results = 'Este servicio no está disponible en este momento.'
                     status = 503
         finally:
             return {'results': results, 'status': status}

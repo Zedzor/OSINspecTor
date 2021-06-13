@@ -25,7 +25,7 @@ def get_emails(domain: str) -> dict:
                     pass
         if lista == []:
             sercode=False
-            raise Exception("No se encontraron resultados para ese dominio")
+            raise Exception("No se encontraron resultados para ese dominio.")
         series = Series(lista).sort_values().drop_duplicates()
         series = series.reset_index(drop=True).to_dict()
         results = series
