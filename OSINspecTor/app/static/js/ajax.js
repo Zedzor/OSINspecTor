@@ -273,3 +273,70 @@ $('#btn_ran').click(function() {
         }
     }); 
 });
+
+$('#btn_vul').click(function() {
+    console.log("click");
+    results_div.innerHTML = ""
+    spinner.style.visibility= "visible";
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: "{% url 'ip' %}",
+        data: {
+            'dir': dir, 
+            'method': "vul",
+        },
+        dataType: "json",
+        success: function(response) {
+            spinner.style.visibility= "hidden";
+            portsList = response.results.ports;
+            vulnsList = response.results.vulns;
+            aux='<div class="row"><div class="col-sm-6">'
+            aux+='<div class="card text-center bg-light text-dark">'
+            aux+='<div class="card-header">Ports</div><div class="card-body">'
+            if (portsList != null){
+                aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+                Object.keys(portsList).forEach(element => {
+                    aux+=`<span class="badge badge-info my-badge">${portsList[element]}</span>`     
+                });
+                aux+='</div>'
+            } else {
+                aux+='<i class="bi bi-x"></i>'
+            }
+            aux+='</div></div></div>'
+
+            aux+='<div class="col-sm-6">'
+            aux+='<div class="card text-center bg-light text-dark">'
+            aux+='<div class="card-header">Vulnerabilities</div>'
+            aux+='<div class="card-body">'
+            if (vulnsList != null){
+                aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+                aux+='<table class="table table-striped">'
+                aux+='<thead class="hideme">'
+                aux+='<tr><th scope="col">V</th></tr></thead><tbody>'
+                Object.keys(vulnsList).forEach(element => {
+                    cve=vulnsList[element]
+                    aux+='<tr><td scope="row"><a class="cve"'
+                    aux+=` href="https://www.cvedetails.com/cve/${cve}/" `
+                    aux+=`target="_blank">${cve}</a></td></tr>`     
+                });
+                aux+='</tbody></table></div>'
+            } else {
+                aux+='<i class="bi bi-x"></i>'
+            }
+            aux+='</div></div></div></div>'
+
+            results_div.innerHTML= aux
+        },
+        error: function(response) {
+            message=response.responseJSON.results;
+            console.log(message);
+            if (response.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
+            spinner.style.visibility= "hidden";
+        }
+    }); 
+});

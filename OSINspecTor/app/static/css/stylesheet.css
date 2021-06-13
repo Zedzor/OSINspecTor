@@ -58,6 +58,11 @@ button {
     overflow: auto;
 }
 
+.my-badge {
+    font-size: 1.3em;
+    margin: 0.5vw;
+}
+
 .table-wrapper-scroll-y {
     display: block;
 }
@@ -67,9 +72,17 @@ img#mat-img{
     height: 40vh;
 }
 
+.hideme{
+    display:none;
+}
+
 /* Links */
 a:link {
     color: var(--color2);
+}
+
+table a.cve{
+    color: var(--color1);
 }
 
 a:visited {

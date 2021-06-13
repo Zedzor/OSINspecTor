@@ -9,7 +9,7 @@ def get_vulns(dir: str)  -> dict:
             param = info_json[key]
             param.sort()
         else:
-            param = 'Desconocido'
+            param = None
         return param
 
     API = 'https://api.shodan.io/shodan/host/'  
@@ -31,6 +31,9 @@ def get_vulns(dir: str)  -> dict:
             'vulns': get_results(data.json(), 'vulns')
         }
         status = 200
+        if results['ports'] is None and results['vulns'] is None:
+            results = "No se encontraron resultados."
+            status = 404
     else:
         results = f'Error: {data.status_code} {data.reason}'
         status = data.status_code
