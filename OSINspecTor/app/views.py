@@ -49,3 +49,19 @@ def ip(request: HttpRequest):
         'buttons': FuncsConfig.get_ip_buttons(),
     }
     return _dominio_e_ip(request, context, FuncsConfig.IP_MODE)
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            contraseña = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=contraseña)
+            login(request, user)
+            return redirect('index')
+        return render(request, 'users/signup.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect(request.GET['next'])
