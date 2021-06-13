@@ -38,10 +38,10 @@ class GeoDomainTestCase(TestCase):
 class  VulDomainTestCase(TestCase):
     def test_dom_vuln(self):
         info = vuln.get_vulns("udc.es")
-        self.assertEqual(str(info), "{'results': {'ports': [80, 443], 'vulns': 'Desconocido'}, 'status': 200}")
+        self.assertEqual(str(info), "{'results': {'ports': [80, 443], 'vulns': None}, 'status': 200}")
     def test_ip_vuln(self):
         info = vuln.get_vulns("193.144.53.84")
-        self.assertEqual(str(info), "{'results': {'ports': [80, 443], 'vulns': 'Desconocido'}, 'status': 200}")
+        self.assertEqual(str(info), "{'results': {'ports': [80, 443], 'vulns': None}, 'status': 200}")
 
 class DnsDomainCase(TestCase):
     def test_dns(self):
