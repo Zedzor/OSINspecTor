@@ -2,7 +2,7 @@ from django.http.request import HttpRequest
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from app.functionalities.funcs import FuncsConfig
-from OSINspecTor.users.forms import LoginForm, SignupFrom
+from app.forms import LoginForm, SignupFrom
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
