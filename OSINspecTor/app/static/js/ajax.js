@@ -156,3 +156,85 @@ $('#btn_sub').click(function() {
         },
     }); 
 });
+
+$('#btn_dns').click(function() {
+    spinner.style.visibility= "visible";
+    console.log("click");
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: `{% url '${res}' %}`,
+        data: {
+            'dir': dir, 
+            'method': "dns",
+        },
+        dataType: "json",
+        success: function(response) {
+            aux='<div class="container bg-light text-dark">'
+            aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+            aux+='<table class="table table-bordered table-striped mb-0">'
+            aux+='<thead><tr><th scope="col">#</th><th scope="col">DNS Servers</th></tr></thead>'
+            aux+='<tbody>'
+            Object.keys(response.results).forEach(element => {
+                aux+=`<tr><td>${element}</td><td>${response.results[element]}</td></tr>`     
+            });
+
+            aux+='</tbody></table></div>'
+            spinner.style.visibility= "hidden";
+            results_div.innerHTML = aux
+        },
+        error: function(response, statusText, xhr) {
+            message=response.responseJSON.results;
+            console.log(message);
+            console.log(xhr.status);
+            if (xhr.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
+            
+            spinner.style.visibility= "hidden";
+        },
+    }); 
+});
+
+$('#btn_mx').click(function() {
+    spinner.style.visibility= "visible";
+    console.log("click");
+    dir=$('#form_input').val();
+    $.ajax({
+        method: 'POST',
+        url: `{% url '${res}' %}`,
+        data: {
+            'dir': dir, 
+            'method': "mx",
+        },
+        dataType: "json",
+        success: function(response) {
+            aux='<div class="container bg-light text-dark">'
+            aux+='<div class="table-wrapper-scroll-y my-custom-scrollbar">'
+            aux+='<table class="table table-bordered table-striped mb-0">'
+            aux+='<thead><tr><th scope="col">#</th><th scope="col">Mail Servers</th></tr></thead>'
+            aux+='<tbody>'
+            Object.keys(response.results).forEach(element => {
+                aux+=`<tr><td>${element}</td><td>${response.results[element]}</td></tr>`     
+            });
+
+            aux+='</tbody></table></div>'
+            spinner.style.visibility= "hidden";
+            results_div.innerHTML = aux
+        },
+        error: function(response, statusText, xhr) {
+            message=response.responseJSON.results;
+            console.log(message);
+            console.log(xhr.status);
+            if (xhr.status==404){
+                results_div.innerHTML=messageBox("warning",message)
+            } else {
+                results_div.innerHTML=messageBox("danger",message)
+            }
+            
+            spinner.style.visibility= "hidden";
+        },
+    }); 
+});
