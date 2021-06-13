@@ -1,6 +1,9 @@
 from app.functionalities.common.geo import get_geo
 from app.functionalities.common.vuln import get_vulns
+from app.functionalities.domain.dns import get_dns
 from app.functionalities.domain.emails import get_emails
+from app.functionalities.domain.mx import get_mx
+from app.functionalities.domain.range import get_range
 from app.functionalities.domain.subdomains import get_subdomains
 from app.functionalities.ip.reverse import get_reverse
 from django.http import JsonResponse
@@ -17,11 +20,11 @@ class FuncsConfig:
     FUNCS = {
         'sub': Functionality('Subdominios', 'btn_sub', get_subdomains), #F1
         'geo': Functionality('Geolocalizar', 'btn_geo', get_geo), #F2
-        'dns': Functionality('DNS', 'btn_dns', None), #F3
-        'mx': Functionality('MX', 'btn_mx', None), #F4
-        'em': Functionality('Emails', 'btn_em', get_emails), #F5
+        'dns': Functionality('DNS', 'btn_dns', get_dns), #F3
+        'mx': Functionality('MX', 'btn_mx', get_mx), #F4
+        'em': Functionality('Emails', 'btn_em', None), #F5
         'rev': Functionality('Reverse', 'btn_rev', get_reverse), #F6
-        'ran': Functionality('IP range', 'btn_ran', None), #F7
+        'ran': Functionality('IP range', 'btn_ran', get_range), #F7
         'vul': Functionality('Vulns', 'btn_vul', get_vulns), #F8
     }
 
@@ -66,15 +69,19 @@ class FuncsConfig:
                     pass # Comprobar IP
 
         except Exception as e:
-            results = JsonResponse({'results': f'Error: {e}'}, status=400)
+            results = f'Error: {e}'
+            status = 400
         else:
             try:
                 func = cls.FUNCS[option].func
                 if func is None:
                     raise Exception('Funcionalidad no implementada todavía.')
             except Exception as e:
-                results = JsonResponse({'results': f'Error: {e}'}, status=501)
+                results = f'Error: {e}'
+                status = 501
             else:
-                results = func(dir)
+                data = func(dir)
+                results = data['results']
+                status = data['status']
         finally:
-            return results
+            return JsonResponse({'results': results}, status=status)

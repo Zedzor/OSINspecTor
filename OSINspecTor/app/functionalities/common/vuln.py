@@ -1,7 +1,6 @@
-import requests
-from django.http.response import JsonResponse
+from requests import get
 
-def get_vulns(dir: str)  -> JsonResponse:
+def get_vulns(dir: str)  -> dict:
 
     def quitar_nulos(foo):
         return foo if foo is not None else 'Desconocido'
@@ -10,18 +9,15 @@ def get_vulns(dir: str)  -> JsonResponse:
     CONSUMER_KEY = 'FrrnWjvV9B3u0Ioi2VjEdIcOgqa9PLDM'
 
     try:
-        data = requests.get(f'{API}{dir}?key={CONSUMER_KEY}')
-        code = data.status_code
-        if code == 200:
+        data = get(f'{API}{dir}?key={CONSUMER_KEY}')
+        if data.status_code == 200:
             info_json = data.json()
-            vul_info = {
-                'ports': quitar_nulos(info_json['ports']),   
-            }
-            response = JsonResponse({'results': vul_info})
+            results = {'ports': quitar_nulos(info_json['ports'])}
         else:
-            response = JsonResponse({'results': f'Error: {code}'}, status=code)
+            results = f'Error: {data.status_code} {data.reason}'
+        status = data.status_code
     except Exception as e:
-        msg = 'Este servicio no está disponible en este momento:'
-        response = JsonResponse({'results': f'{msg} {e}'}, status=503)
+        results = 'Este servicio no está disponible en este momento:'
+        status = 503
     finally:
-        return response
+        return {'results': results, 'status': status}

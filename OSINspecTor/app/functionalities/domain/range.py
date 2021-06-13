@@ -1,5 +1,5 @@
-from socket import gethostbyname as g_host
-import requests
+from socket import gethostbyname
+from  requests import get
 
 def get_range(domain: str) -> dict:
 
@@ -7,9 +7,7 @@ def get_range(domain: str) -> dict:
     FLAGS = '&type-filter=inetnum&flags=no-referenced&flags=no-irt&source=RIPE'
 
     try:
-        param = g_host(domain)
-        data = requests.get(f'{API}{param}{FLAGS}')
-        data.status_code
+        data = get(f'{API}{gethostbyname(domain)}{FLAGS}')
         if data.status_code == 200:
             json_res = data.json()
             json_res = json_res['objects']['object'][0]

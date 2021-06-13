@@ -1,19 +1,18 @@
-import requests
-from django.http.response import JsonResponse
+from requests import get
 
-def get_reverse(ip: str) -> JsonResponse:
+def get_reverse(ip: str) -> dict:
 
-	REVURL = 'https://sonar.omnisint.io/reverse/'
+    REVURL = 'https://sonar.omnisint.io/reverse/'
 
-	try:
-		data = requests.get(f'{REVURL}{ip}')
-		code = data.status_code
-		if code == 200:
-			response = JsonResponse({'results': data.json()})
-		else:
-			response = JsonResponse({'results': f"Error: {code}"}, status=code)
-	except Exception as e:
-		msg = 'Este servicio no está disponible en este momento:'
-		response = JsonResponse({'results': f'{msg} {e}'}, status=503)
-	finally:
-		return response
+    try:
+        data = get(f'{REVURL}{ip}')
+        if data.status_code == 200:
+            results = data.json()
+        else:
+            results = f'Error: {data.status_code} {data.reason}'
+        status = data.status_code
+    except Exception as e:
+        results = 'Este servicio no está disponible en este momento:'
+        status = 503
+    finally:
+        return {'results': results, 'status': status}
