@@ -166,6 +166,8 @@ $('#btn_sub').click(function() {
 });
 
 $('#btn_dns').click(function() {
+    console.log("click");
+    results_div.innerHTML = ""
     spinner.style.visibility= "visible";
     console.log("click");
     dir=$('#form_input').val();
@@ -205,6 +207,8 @@ $('#btn_dns').click(function() {
 });
 
 $('#btn_mx').click(function() {
+    console.log("click");
+    results_div.innerHTML = ""
     spinner.style.visibility= "visible";
     console.log("click");
     dir=$('#form_input').val();
@@ -275,6 +279,7 @@ $('#btn_ran').click(function() {
 });
 
 $('#btn_vul').click(function() {
+    document.getElementById("btn_vul").disabled = true;
     console.log("click");
     results_div.innerHTML = ""
     spinner.style.visibility= "visible";
@@ -327,6 +332,7 @@ $('#btn_vul').click(function() {
             aux+='</div></div></div></div>'
 
             results_div.innerHTML= aux
+            document.getElementById("btn_vul").disabled = false;
         },
         error: function(response) {
             message=response.responseJSON.results;
@@ -337,6 +343,7 @@ $('#btn_vul').click(function() {
                 results_div.innerHTML=messageBox("danger",message)
             }
             spinner.style.visibility= "hidden";
+            document.getElementById("btn_vul").disabled = false;
         }
     }); 
 });

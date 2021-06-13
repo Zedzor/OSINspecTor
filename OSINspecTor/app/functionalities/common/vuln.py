@@ -21,8 +21,11 @@ def get_vulns(dir: str)  -> dict:
         'RGA9cuLe2xkxBjmregqGrlDM0valZBuY',
         'ZDZZNY7abyomOHsz9d3jCsfT3HXB5Htu',
     ]
+    try:
+        dir= gethostbyname(dir)
+    except:
+        dir = 'invalidquery'
 
-    dir = gethostbyname(dir)
     key = CONSUMER_KEYS[randrange(len(CONSUMER_KEYS))]
     data = get(f'{API}{dir}?key={key}')
     if data.status_code == 200:
@@ -34,6 +37,9 @@ def get_vulns(dir: str)  -> dict:
         if results['ports'] is None and results['vulns'] is None:
             results = "No se encontraron resultados."
             status = 404
+    elif data.status_code == 404:
+        results =  'No se encontraron puertos abiertos ni vulnerabilidades.'
+        status = 404
     else:
         results = f'Error: {data.status_code} {data.reason}'
         status = data.status_code
